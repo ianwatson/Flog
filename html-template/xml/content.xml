@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<settings>
+		<!-- multiple of stage dimensions for label placement boundary -->
+		<item id="view-scale">0.5</item> 
+		<!-- milliseconds to pixels ratio -->
+		<item id="time-ratio">0.0000050</item> 
+		<!-- pixel increment for zoom on mouse wheel scroll -->
+		<item id="zoom-increment">75</item>
+		<!-- decay applied to zoom on each frame -->
+		<item id="zoom-decay">0.97</item>
+		<!-- duration of zoom transition -->
+		<item id="zoom-duration">1.5</item>
+		<!-- camera field of vision -->
+		<item id="camera-fov">35</item>
+		<!-- camera offset to give distance from current item -->
+		<item id="camera-offset">2250</item>
+		<!-- easing to apply to panning movement on each frame -->
+		<item id="pan-easing">0.035</item>
+		<!-- number of items to display at any time -->
+		<item id="visible-items">8</item>
+		<!-- offset from camera position at which items become invisible -->
+		<item id="visible-offset">1000</item>
+		<!-- pixel range on z within which items are considered to intersect -->
+		<item id="intersection-range">1500</item>
+		<!-- number of times to attempt intersection fix -->
+		<item id="intersection-retries">50</item>		
+		<!-- kuler RSS -->
+		<!--http://kuler-api.adobe.com/rss/get.cfm?listType=random&startIndex=1&itemsPerPage=1&timeSpan=6000&key=02B22870C7D027FC33E7497791EB9904-->
+		<item id="kuler-feed"><![CDATA[http://kuler-api.adobe.com//feeds/rss/get.cfm?timeSpan=30&listType=popular&itemsPerPage=1]]></item>
+	</settings>
+	<dictionary>
+		<item id="title">Title text</item>
+		<item id="button_label">Button label</item>
+		<item id="instructional_text">Instructional text</item>
+	</dictionary>
+	<stylesheet id="main">css/flash.css</stylesheet>
+	<logger>debug/XrayConnector_as3.swf</logger>
+	<fonts>
+		<font id="Impact">fonts/Impact.swf</font>
+		<font id="Arial">fonts/Arial.swf</font>
+	</fonts>
+	<remoting>
+		<gateway>http://localhost/amfphp/gateway.php</gateway>
+		<!-- gateway>http://sweetweb.dsvr.co.uk/amfphp/gateway.php</gateway -->
+		<service>Flog</service>
+		<method>GetEntries</method>
+	</remoting>
+	<library>assets/library.swf</library>
+	<default_theme>
+		<id>430169</id>
+		<title>Stonehaven</title>
+		<swatches>
+			<swatch>353230</swatch>
+			<swatch>3F4E51</swatch>
+			<swatch>7B8F70</swatch>
+			<swatch>99B2BE</swatch>
+			<swatch>F6F4EA</swatch>
+		</swatches>
+		<!-- swatches>
+			<swatch>ff0000</swatch>
+			<swatch>00ff00</swatch>
+			<swatch>0000ff</swatch>
+			<swatch>cccccc</swatch>
+			<swatch>336699</swatch>
+		</swatches -->
+	</default_theme>
+	<!-- 
+		646452
+		Wings of a Dove
+		4673881,8624021,11713975,13420992,15921906	
+		
+		640824
+		on the road again
+		16736780,15041610,10715502,4539975,2961203
+	-->
+</data>

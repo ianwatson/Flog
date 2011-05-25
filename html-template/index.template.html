@@ -1,0 +1,236 @@
+<!DOCTYPE html> 
+<html lang="en">
+	<head>
+		<title>Flog</title>
+		<meta charset="utf-8" />
+		
+		<link type="text/css" href="css/flog.css" rel="stylesheet" media="all" />
+		<link type="text/css" href="css/jquery-ui-1.8.12.custom.css" rel="stylesheet" media="all" />
+		<link type="text/css" href="fancybox/jquery.fancybox-1.3.4.css" rel="stylesheet" media="screen" />
+				
+		<script type="text/javascript" src="scripts/swfobject.js"></script>
+		<script type="text/javascript" src="scripts/swfwheel.js"></script>
+		<script type="text/javascript" src="scripts/external_interface.js"></script>	
+		<script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
+		<script type="text/javascript" src="scripts/jquery-ui-1.8.12.custom.min.js"></script>
+		<script type="text/javascript" src="scripts/jquery.log.js"></script>
+		<script type="text/javascript" src="fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+	</head>
+	<body>
+		
+		<div id="content">
+			<strong>You need to upgrade your Flash Player</strong>
+			This is replaced by the Flash content. 
+			Place your alternate content here and users without the Flash plugin or with 
+			Javascript turned off will see this. Content here allows you to leave out <code>noscript</code> 
+			tags. Include a link to <a href="expressinstall.html?detectflash=false">bypass the detection</a> if you wish.
+		</div>
+		
+		<div id="resizable" class="ui-widget-content">
+			<nav>
+				<ul>
+					<li><a href="#comment-form" id="comment-button">COMMENT</a></li>
+					<li><a href="#contact-form" id="contact-button">CONTACT</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div id="fancy-wrapper">
+			<div id="image-overlay"></div>
+		</div>
+		
+		<div class="fancy-wrapper">
+			<div id="speech-bubble" class="triangle-border"></div>
+		</div>
+		
+		<a href="#speech-bubble" id="speech-bubble-button"></a>		
+		
+		<div class="fancy-wrapper">
+			<div id="comment-form">
+				<form action="">
+					<fieldset>
+						<label for="name" id="name_label">Name</label>
+						<input type="text" name="name" id="name" size="30" value="" class="text-input" />  
+						<label for="name" id="name_error" class="error">This field is required.</label>  
+						<label for="message" id="message_label">Message</label>
+						<textarea name="message" id="message" rows="10" cols="30" class="text-input"></textarea>
+						<label for="name" id="message_error" class="error">This field is required.</label>
+						<input type="submit" name="submit" class="button" value="Send" />
+						<input type="hidden" id="url" value="scripts/Comment.php" />
+					</fieldset>
+				</form>
+			</div>	
+		</div>
+		
+		<div class="fancy-wrapper">
+			<div id="contact-form">
+				<form action="">
+					<fieldset>
+						<label for="name" id="name_label">Name</label>
+						<input type="text" name="name" id="name" size="30" value="" class="text-input" />  
+						<label for="name" id="name_error" class="error">This field is required.</label>  
+						<label for="email" id="email_label">Email</label>
+						<input type="email" name="email" id="email" size="30" value="" class="email-input" />  
+						<label for="message" id="message_label">Message</label>
+						<textarea name="message" id="message" rows="10" cols="30" class="text-input"></textarea>
+						<label for="name" id="message_error" class="error">This field is required.</label>
+						<input type="submit" name="submit" class="button" value="Send" />
+						<input type="hidden" id="url" value="scripts/Contact.php" />
+					</fieldset>
+				</form>
+			</div>	
+		</div>
+		
+		<!-- embed the flash -->
+		<script type="text/javascript">
+			
+			var flashvars = {xmladdress: "xml/content.xml"};
+			var params = {wmode: "opaque"};
+			var attributes = {id: "flashContent", name: "flashContent"};
+
+			swfobject.embedSWF("Main.swf", "content", "100%", "100%", "8.0.0", "expressInstall.swf", flashvars, params, attributes);
+
+		</script>
+	
+		<!-- some fun with jQuery -->
+		<script type="text/javascript">
+		
+			var success = false;
+
+			$("#resizable").resizable({
+				animate: true
+				/*handles: "sw"*/
+				/*animateEasing: "bounce"*/
+			});
+
+			function showPhoto(url, title)
+			{
+				$.fancybox("#image-overlay",
+						{
+							'type'				: 'image',
+							'href'				: url,
+							'title'				: title,
+							'overlayOpacity'	: 0.1,
+				        	'autoDimensions'	: false,
+							'width'         	: 350,
+							'height'        	: 'auto',
+							'onClosed'			: function() { 
+								flashInterface({command: 'overlay_closed'});
+							}
+						}
+					);		
+			}
+
+			function showComment(text, name)
+			{
+				$("#speech-bubble").html("<p>" + text + "<" + "/p>")
+				$("#speech-bubble-button").trigger('click');
+			}
+
+			$("#comment-button").fancybox({
+				'scrolling'			: 'no',
+				'titleShow'			: false,
+				'height'			: 'auto',
+				'showCloseButton'	: false,
+				'onStart'			: function () { 
+					flashInterface({command: "pause"});
+				},
+				'onClosed'			: function() {
+					$context = $("#comment-form");
+					var command = success ? "comment_posted" : "restart";
+
+					flashInterface({
+						command: command, 
+						params: [
+							$("input#name", $context).val(),
+							$("textarea#message", $context).val()
+						]
+					}); 
+				}
+			});		
+			
+			$("#contact-button").fancybox({
+				'scrolling'			: 'no',
+				'titleShow'			: false,
+				'height'			: 'auto',
+				'showCloseButton'	: false,
+				'onStart'			: function () { 
+					flashInterface({command: "pause"});
+				},
+				'onClosed'			: function() {
+					flashInterface({command: "restart"});
+				}
+			});		
+		
+			$("#speech-bubble-button").fancybox({
+				'overlayOpacity'	: 0.1,
+				'scrolling'			: 'no',
+				'titleShow'			: false,
+				'height'			: 'auto',
+				'showCloseButton'	: false,
+				'onClosed'			: function() {
+					flashInterface({command: "overlay_closed"});
+				}
+			});	
+			
+			$("#comment-form .button").click(function() {
+				sendForm("#comment-form");
+				return false;	
+			});	
+
+			$("#contact-form .button").click(function() {
+				sendForm("#contact-form");	
+				return false;
+			});	
+			
+			$('.error').hide();
+			
+			function sendForm(context)
+			{
+				$context = context; 
+				
+				// validate and process form here
+				//$('.error', context).log();
+						
+				// validate name field
+				var name = $("input#name", $context).val();
+				if (name == "") {
+					$("label#name_error", $context).show();
+					$("input#name", $context).focus();
+					return false;
+				}
+				// validate message field
+				var message = $("textarea#message", $context).val();
+				if (message == "") {
+					$("label#message_error", $context).show();
+					$("input#message", $context).focus();
+					return false;
+				}
+
+				$.ajax({
+					type: "POST",
+					url: $("input#url", $context).val(),
+					data: $("form", $context).serialize(),
+					success: function(data) {
+						
+						var output = data == "1" 
+							? "success"
+							: "fail";
+							
+						$("").log(output);
+						
+						/*
+						$("#comment-form").html("<div id='message'><" + "/div>").log("Ce'st moi");
+						$('#message').html("<h2>Comment Form Submitted!<" + "/h2>")
+						.hide()
+						.fadeIn(1500);
+						*/
+						
+						success = true;
+					}
+				});
+			}		
+		</script>	
+	</body>
+</html>
+

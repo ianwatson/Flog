@@ -1,0 +1,18 @@
+﻿.date {
+ font-size: 20px;
+ font-weight: bold;
+ font-family: Courier New;
+ color: #000000;
+}
+
+.label {
+ font-size: 14px;
+ font-family: Arial;
+ color: #999999;
+}
+
+p {
+ font-size: 12px;
+ font-family: Arial;
+ color: #333333;
+}
